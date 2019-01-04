@@ -38,10 +38,10 @@
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
-     if (n >= array.length){
+    if (n >= array.length) {
       return array;
-     }
-     return n === undefined ? array[array.length - 1] : array.slice(array.length - n , array.length);
+    }
+    return n === undefined ? array[array.length - 1] : array.slice(array.length - n, array.length);
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -51,13 +51,13 @@
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
     //Array
-    if(Array.isArray(collection)){
-      for (var i = 0; i < collection.length; i++){
-        iterator(collection[i], i, collection)
+    if (Array.isArray(collection)) {
+      for (var i = 0; i < collection.length; i++) {
+        iterator(collection[i], i, collection);
       }
-    }else{
-      for (var key in collection){
-        iterator(collection[key], key, collection)
+    } else {
+      for (var key in collection) {
+        iterator(collection[key], key, collection);
       } 
     }
     //Object
@@ -84,8 +84,8 @@
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
     var returnArr = [];
-    _.each(collection, function(item){
-      if(test(item)){
+    _.each(collection, function(item) {
+      if (test(item)) {
         returnArr.push(item);
       }
     });
@@ -96,20 +96,78 @@
   _.reject = function(collection, test) {
     // TIP: see if you can re-use _.filter() here, without simply
     // copying code in and modifying it
-    return _.filter(collection, function(item){
+    return _.filter(collection, function(item) {
       return !(test(item));
-    })
+    });
   };
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array, isSorted, iterator) {
-    var returnArr = [];
-    _.each(array, function(item){
-      if( _.indexOf(returnArr, item) === -1){
-        returnArr.push(item);
-      }
+    // var uniqueValue = {};
+    // iterator = iterator || _.identity ;
+    // var result = [];
+
+    // for (var i = 0; i < array.length; i++) {
+    //   var iteratedValue = iterator(array[i])
+    //   uniqueValue[iteratedValue] = iteratedValue;
+    // }
+    // for (var key in uniqueValue) {
+    //   result.push(uniqueValue[key]);
+    // }
+    
+    // return result;
+    
+    // var supArray = [];
+    // var iterArray = [];
+    // var newArray = [];
+
+    // if(isSorted){
+
+    // };
+    
+    // if(iterator){
+    //   _.each(array, function(item){
+    //     supArray.push(iterator(item));
+    //   });
+    //   console.log(supArray);
+    //   for (var i = 0; i < supArray.length; i++){
+    //     if(!iterArray.includes(supArray[i])){
+    //       iterArray.push(supArray[i]);
+    //       newArray.push(array[i]);
+    //       console.log("rajat");
+    //     }
+    //   }
+    // } else {
+    //   for (var i = 0; i < array.length; i++){
+    //     if(!newArray.includes(array[i])){
+    //     newArray.push(array[i]);
+    //   }
+    // }
+    // }
+    // return newArray;
+    
+    
+    iterator = iterator || _.identity;
+    
+    var supArray = [];
+    var iterArray = [];
+    var newArray = [];
+
+    if (isSorted) {
+
+    }
+    
+    _.each(array, function(item) {
+      supArray.push(iterator(item));
     });
-    return returnArr;
+    
+    for (var i = 0; i < supArray.length; i++) {
+      if (!iterArray.includes(supArray[i])) {
+        iterArray.push(supArray[i]);
+        newArray.push(array[i]);
+      }
+    }
+    return newArray;  
   };
 
 
@@ -118,6 +176,11 @@
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var returnArr = [];
+    _.each(collection, function(item) {
+      returnArr.push(iterator(item));
+    });
+    return returnArr;
   };
 
   /*
@@ -159,6 +222,16 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    var startPoint = arguments.length === 2;
+    _.each(collection, function(value) {
+      if (startPoint) {
+        accumulator = value;
+        startPoint = false;
+      } else {
+        accumulator = iterator(accumulator, value);
+      }
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
@@ -177,12 +250,26 @@
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+    return _.reduce(collection, function(acc, element) {
+      if (!acc) {
+        return false;
+      }
+      return !!iterator(element);
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator || _.identity;
+    return _.reduce(collection, function(acc, element) {
+      if (acc) {
+        return true;
+      }
+      return !!iterator(element);
+    }, false);
   };
 
 
@@ -313,7 +400,7 @@
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
   };
-
+    
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {

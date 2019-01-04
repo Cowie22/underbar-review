@@ -58,7 +58,7 @@
       });
 
       it('should accept an index argument', function() {
-        expect(_.last([1, 2, 3], 2)).to.eql([2,3]);
+        expect(_.last([1, 2, 3], 2)).to.eql([2, 3]);
       });
 
       it('should return empty array if zero is passed in as the index', function() {
@@ -251,7 +251,7 @@
 
       it('should return all odd numbers in an array', function() {
         var isOdd = function(num) { return num % 2 !== 0; };
-        var odds = [1,3,5];
+        var odds = [1, 3, 5];
 
         expect(odds).to.eql([1, 3, 5]);
       });
@@ -332,7 +332,7 @@
         var iterator = function(value) { return value === 1; };
         var numbers = [1, 2, 2, 3, 4, 4];
 
-        expect(_.uniq(FILL_ME_IN)).to.eql([1, 2]);
+        expect(_.uniq(numbers, true, iterator)).to.eql([1, 2]);
       });
 
       it('should produce a brand new array instead of modifying the input array', function() {
@@ -383,7 +383,7 @@
       });
 
       it('should apply a function to every value in an array', function() {
-        var multiplyByTwo = FILL_ME_IN;
+        var multiplyByTwo = function(val) { return 2 * val; };
 
         expect(_.map([1, 2, 3], multiplyByTwo)).to.eql([2, 4, 6]);
       });
@@ -406,7 +406,7 @@
           { name: 'curly', age: 50 }
         ];
 
-        expect(_.pluck(people, 'name')).to.FILL_ME_IN(['moe', 'curly']);
+        expect(_.pluck(people, 'name')).to.eql(['moe', 'curly']);
       });
 
       it('should not modify the original array', function() {
@@ -417,7 +417,7 @@
 
         _.pluck(people, 'name');
 
-        expect(people).to.FILL_ME_IN([{ name: 'moe', age: 30 }, { name: 'curly', age: 50 }]);
+        expect(people).to.deep.equal([{ name: 'moe', age: 30 }, { name: 'curly', age: 50 }]);
       });
     });
 
@@ -477,6 +477,7 @@
           // FILL_ME_IN
           // Add a line here that makes this test pass
           // for a working implementation of reduce
+          orderTraversed.push(item);
           return memo;
         }, 10);
 
