@@ -292,11 +292,33 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    if (arguments.length > 1) {
+      for (let i = 0; i < arguments.length; i++) {
+        let argumentObject = arguments[i];
+        for (let key in argumentObject) {
+          obj[key] = argumentObject[key];
+        }
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    if (arguments.length > 1) {
+      for (let i = 0; i < arguments.length; i++) {
+        let argObj = arguments[i];
+        for (let key in argObj) {
+          if (obj.hasOwnProperty(key)) {
+            obj[key] = obj[key];
+          } else {
+            obj[key] = argObj[key];
+          }
+        }
+      }
+    }
+    return obj;
   };
 
 
@@ -339,17 +361,29 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
+_.memoize = function(func) {
+  var obj = {};
+  return function() {
+    var key = JSON.stringify(arguments);
+    if (key in obj) {
+      return obj[key];
+    } else {
+      return (obj[key] = func.apply(null, arguments));
+    }
   };
-
+};
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
   // The arguments for the original function are passed after the wait
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
-  _.delay = function(func, wait) {
-  };
+_.delay = function(func, wait) {
+  var args = Array.prototype.slice.call(arguments, 2);
+  setTimeout(function() {
+    func.apply(null, args);
+  }, wait);
+};
 
 
   /**
@@ -363,6 +397,15 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    let newArr = array.slice();
+    let shuffledArr = [];
+    let randomIndex;
+    for (let i = 0; i < array.length; i++) {
+      randomIndex = Math.floor(Math.random() * newArr.length)
+      shuffledArr.push(newArr[randomIndex]);
+      newArr.splice(randomIndex, 1);
+    }
+    return shuffledArr;
   };
 
 
